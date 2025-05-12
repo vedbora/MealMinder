@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>MealMinder - Dashboard</title>
+
+  <!-- External CSS: Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- External JS: Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom Styles -->
+  <style>
+    /* Global Styles */
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.unsplash.com/photo-1578960281840-cb36759fb109?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(15, 23, 42, 0.55);
+      z-index: 0;
+    }
+
+    /* Main Container */
+    #app {
+      max-width: 420px;
+      height: 100vh;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.97);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      padding: 1.5rem 1.25rem;
+      overflow-y: auto;
+    }
+
+    /* Header Styles */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    header h1 {
+      font-weight: 800;
+      font-size: 2rem;
+      color: #319795; /* Default header color */
+      user-select: none;
+    }
+
+    /* Button Styles */
+    button.logout-btn {
+      background: transparent;
+      border: 2px solid #319795; /* Logout button color */
+      color: #319795;
+      border-radius: 30px;
+      padding: 0.3rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button.logout-btn:hover {
+      background-color: #319795; /* Hover color for logout */
+      color: white;
+    }
+
+    /* Welcome Text */
+    .welcome-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1.7rem;
+      color: #2d3748;
+    }
+
+    /* Dashboard Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .dashboard-grid button {
+      background-color: #0091d5; /* Updated button color */
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 1.4rem;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0, 145, 213, 0.6);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .dashboard-grid button:hover, .dashboard-grid button:focus {
+      background-color: #007bb5; /* Hover color for buttons */
+      box-shadow: 0 8px 25px rgba(0, 123, 151, 0.8);
+      outline: none;
+    }
+
+    /* Responsive Design */
+    @media(max-width: 400px) {
+      #app {
+        max-width: 100vw;
+        border-radius: 0;
+        height: 100vh;
+      }
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Main App Container -->
+  <div id="app" role="main" aria-label="Dashboard Page">
+    <!-- Header -->
+    <header>
+      <h1>MealMinder</h1>
+      <button class="logout-btn" id="logout-btn" aria-label="Logout">Logout</button>
+    </header>
+
+    <!-- Welcome Text -->
+    <div id="welcome" class="welcome-text"></div>
+
+    <!-- Dashboard Buttons -->
+    <div class="dashboard-grid" id="dashboard-buttons">
+      <!-- Buttons inserted by script -->
+    </div>
+  </div>
+
+  <!-- Script Section -->
+  <script>
+    // Get the user type from query string
+    function getUserType() {
+      const params = new URLSearchParams(window.location.search);
+      const userType = params.get('user') || 'hosteler';
+      return (userType === 'hosteler' || userType === 'it') ? userType : 'hosteler';
+    }
+
+    // Render Dashboard Based on User Type
+    function renderDashboard() {
+      const userType = getUserType();
+      const welcomeEl = document.getElementById('welcome');
+      const dashboardEl = document.getElementById('dashboard-buttons');
+
+      if (userType === 'hosteler') {
+        welcomeEl.textContent = 'Welcome back, Hosteler! Manage your meals, community, and budget with ease.';
+        dashboardEl.innerHTML = `
+          <button onclick="goTo('meal-reminder.html')" aria-label="Meal Reminder">Meal Reminder</button>
+          <button onclick="goTo('health-tips.html')" aria-label="Health Tips">Health Tips</button>
+          <button onclick="goTo('mess-menu.html')" aria-label="Mess Menu & Feedback">Mess Menu & Feedback</button>
+          <button onclick="goTo('community-board.html')" aria-label="Hostel Community Board">Community Board</button>
+          <button onclick="goTo('tiffin-finder.html')" aria-label="Tiffin/Nearby Food Finder">Tiffin/Nearby Food</button>
+          <button onclick="goTo('budget-tracker.html')" aria-label="Budget Tracker">Budget Tracker</button>
+          <button onclick="goTo('grocery-list.html')" aria-label="Grocery List Generator">Grocery List</button>
+        `;
+      } else {
+        welcomeEl.textContent = 'Hello IT Professional! Optimize your office meals and health effortlessly.';
+        dashboardEl.innerHTML = `
+          <button onclick="goTo('meal-reminder.html')" aria-label="Meal Reminder">Meal Reminder</button>
+          <button onclick="goTo('health-tips.html')" aria-label="Health Tips">Health Tips</button>
+          <button onclick="goTo('office-pantry.html')" aria-label="Office Pantry Suggestions">Office Pantry Suggestions</button>
+          <button onclick="goTo('desk-diet.html')" aria-label="Desk-Friendly Diet">Desk-Friendly Diet</button>
+          <button onclick="goTo('nearby-food.html')" aria-label="Nearby Food Options">Nearby Food Options</button>
+          <button onclick="goTo('grocery-list.html')" aria-label="Grocery List Generator">Grocery List</button>
+        `;
+      }
+    }
+
+    // Redirect to a specific page
+    function goTo(page) {
+      const userType = getUserType();
+      window.location.href = `${page}?user=${userType}`;
+    }
+
+    // Logout and redirect to landing page
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      window.location.href = 'landing.html';
+    });
+
+    // Call the renderDashboard function when the page loads
+    renderDashboard();
+  </script>
+</body>
+</html>

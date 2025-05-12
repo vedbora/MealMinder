@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>MealMinder - Desk-Friendly Diet Tips</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&h=900&w=1600') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #2d3748;
+    }
+    /* White overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+      z-index: 0;
+    }
+    /* Main content container */
+    #content {
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 2.5rem;
+      background: rgba(255, 255, 255, 0.95); /* Semi-transparent white */
+      border-radius: 20px;
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 420px;
+    }
+    header {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    header h1 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: #319795;
+      user-select: none;
+    }
+    button.back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: transparent;
+      border: 2px solid #319795;
+      color: #319795;
+      border-radius: 30px;
+      padding: 0.3rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 2;
+    }
+    button.back-btn:hover {
+      background-color: #319795;
+      color: white;
+    }
+    ul {
+      list-style-position: inside;
+      padding-left: 0;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #2d3748;
+      line-height: 1.6rem;
+      margin: 0;
+      text-align: left; /* Align bullet points properly */
+    }
+    ul li {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    @media (max-width: 400px) {
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" aria-label="Back to Dashboard" id="back-btn">&larr; Dashboard</button>
+  <div id="content" role="main" aria-label="Desk-Friendly Diet Tips Page">
+    <header>
+      <h1>Desk-Friendly Diet Tips</h1>
+    </header>
+    <ul>
+      <li>Stay hydrated throughout the day.</li>
+      <li>Choose low-carb snacks.</li>
+      <li>Eat small portions frequently.</li>
+      <li>Use a water timer app.</li>
+      <li>Keep healthy snacks at your desk.</li>
+    </ul>
+  </div>
+
+  <script>
+    document.getElementById('back-btn').addEventListener('click', () => {
+      const params = new URLSearchParams(window.location.search);
+      const userType = params.get('user') || 'it';
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+  </script>
+</body>
+</html>

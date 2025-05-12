@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>MealMinder - Login</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Lato for input text -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://img.freepik.com/free-photo/top-view-circular-frame-with-fruits-vegetables_23-2149235829.jpg?t=st=1746273022~exp=1746276622~hmac=10f4621d0a96def4a3fdda9915586dee726317526b858e862a62d09c1439999f&w=996') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top:0;left:0;right:0;bottom:0;
+      background-color: rgba(10, 20, 30, 0.7); /* Dark overlay for better contrast */
+      z-index: 0;
+    }
+    #login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Subtle shadow to make it stand out */
+      margin-top: 10vh;
+      background: none; /* No background color, fully transparent */
+    }
+    h2 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: #fff; /* White text */
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #fff; /* White text */
+    }
+    input[type=email], 
+    input[type=password] {
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      padding: 12px 15px;
+      font-size: 1rem;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+      background-color: rgba(255, 255, 255, 0.8); /* Light transparent background for inputs */
+      color: #000; /* Black text inside input */
+      font-family: 'Lato', sans-serif; /* Apply the custom font 'Lato' */
+      font-weight: 600; /* Bold text */
+    }
+    input[type=email]:focus, input[type=password]:focus {
+      outline: none;
+      border-color: #319795;
+      box-shadow: 0 0 10px #319795aa;
+    }
+    input[type=email]:hover, input[type=password]:hover {
+      border-color: #2c7a7b; /* Slight hover effect for input fields */
+      transform: scale(1.02); /* Slight scale up effect on hover */
+    }
+    .radio-group {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 25px;
+    }
+    .radio-group label {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff; /* White text */
+    }
+    button[type=submit] {
+      background-color: #319795;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 14px;
+      border-radius: 30px;
+      width: 100%;
+      box-shadow: 0 5px 15px rgba(49,151,149,0.6);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button[type=submit]:hover, button[type=submit]:focus {
+      background-color: white; /* White background on hover */
+      color: #319795; /* Change text to color for contrast */
+      box-shadow: 0 8px 25px rgba(44,122,123,0.8);
+      outline: none;
+      transform: translateY(-3px); /* Slight upward movement */
+    }
+    .link-to-register {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 1rem;
+      color: #fff; /* White text */
+    }
+    .link-to-register a {
+      color: #319795;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .link-to-register a:hover {
+      color: #2c7a7b; /* Color change on hover */
+      text-decoration: underline;
+    }
+    @media (max-width: 400px) {
+      #login-container {
+        margin-top: 5vh;
+        padding: 25px 25px;
+      }
+      h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main id="login-container" role="main" aria-label="Login Page">
+    <h2>Login</h2>
+    <form id="login-form" novalidate aria-describedby="login-instruction">
+      <p id="login-instruction" class="visually-hidden">Enter credentials and select your user type to login</p>
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@example.com" required autocomplete="username" />
+      <label for="password">Password</label>
+      <input id="password" type="password" placeholder="password" required autocomplete="current-password" />
+      <div class="radio-group" role="radiogroup" aria-label="Select user type">
+        <label><input type="radio" name="userType" value="hosteler" checked /> Student</label>
+        <label><input type="radio" name="userType" value="it" /> IT Professional</label>
+      </div>
+      <button type="submit" aria-label="Submit login form">Login</button>
+    </form>
+    <p class="link-to-register">Don't have an account? <a href="register.html">Register here</a></p>
+  </main>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const userType = document.querySelector('input[name="userType"]:checked').value;
+      if(!email || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
+      // Simple simulation of login success:
+      alert(`Welcome back, ${userType === 'hosteler' ? 'Hosteler' : 'IT Professional'}!`);
+      // Redirect to dashboard with user type info via query string
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+  </script>
+</body>
+</html>

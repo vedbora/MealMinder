@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>MealMinder - Office Pantry Suggestions</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.pexels.com/photos/3184295/pexels-photo-3184295.jpeg?auto=compress&cs=tinysrgb&h=900&w=1600') no-repeat center center fixed;
+      background-size: cover;
+      color: #2d3748;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(255,255,255,0.85);
+      z-index: 0;
+    }
+
+    .back-button-fixed {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    .back-btn {
+      background: transparent;
+      border: 2px solid #111;
+      color: #0e0f0f;
+      border-radius: 30px;
+      padding: 0.3rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: #0b0b0b;
+      color: white;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 2rem 1.5rem;
+      max-width: 700px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 4.5rem;
+      font-weight: 900;
+      color: #319795;
+      margin-bottom: 2rem;
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #0e0e0e;
+      line-height: 1.6rem;
+      text-align: left;
+      display: inline-block;
+    }
+
+    ul li {
+      margin-bottom: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .back-button-fixed {
+        top: 10px;
+        left: 10px;
+      }
+
+      ul {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Back Button -->
+  <div class="back-button-fixed">
+    <button class="back-btn" aria-label="Back to Dashboard" id="back-btn">&larr; Dashboard</button>
+  </div>
+
+  <!-- Main Content -->
+  <main role="main" aria-label="Office Pantry Suggestions Page">
+    <h1>Office Pantry Suggestions</h1>
+    <ul>
+      <li>Nuts & Seeds</li>
+      <li>Fresh Fruits</li>
+      <li>Energy Bars</li>
+      <li>Green Tea</li>
+      <li>Herbal Infusions</li>
+      <li>Vegetable Sticks</li>
+      <li>Yogurt</li>
+      <li>Mixed Salads</li>
+      <li>Smoothie Packs</li>
+    </ul>
+  </main>
+
+  <script>
+    document.getElementById('back-btn').addEventListener('click', () => {
+      const params = new URLSearchParams(window.location.search);
+      const userType = params.get('user') || 'it';
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+  </script>
+</body>
+</html>

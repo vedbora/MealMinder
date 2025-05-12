@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>MealMinder - Budget Tracker</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.pexels.com/photos/769289/pexels-photo-769289.jpeg?auto=compress&cs=tinysrgb&h=900&w=1600') no-repeat center center fixed;
+      background-size: cover;
+      color: #2d3748;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top:0;left:0;right:0;bottom:0;
+      background-color: rgba(255,255,255,0.85);
+      z-index: 0;
+    }
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 500px;
+      margin: 80px auto 40px auto;
+      padding: 2rem;
+    }
+    button.back-btn,
+    button[type=submit],
+    button.clear-btn {
+      background: white;
+      border: none;
+      border-radius: 30px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button.back-btn {
+      color: black;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2;
+    }
+    button.back-btn:hover {
+      background-color: black;
+      color: white;
+      transform: translateY(-5px);
+    }
+    button[type=submit] {
+      color: black;
+    }
+    button[type=submit]:hover {
+      background-color: black;
+      color: white;
+      transform: translateY(-5px);
+    }
+    button.clear-btn {
+      color: red;
+      margin-top: 1rem;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    button.clear-btn:hover {
+      background-color: red;
+      color: white;
+      transform: translateY(-5px);
+    }
+    header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    header h1 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: black;
+      white-space: nowrap;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 2rem;
+    }
+    label {
+      font-weight: 600;
+      color: #334155;
+      font-size: 1.1rem;
+    }
+    input[type=text], input[type=number] {
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      padding: 12px 15px;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: all 0.25s ease;
+    }
+    input[type=text]:focus, input[type=number]:focus {
+      outline: none;
+      border-color: #319795;
+      box-shadow: 0 0 10px #319795aa;
+    }
+    #expense-list {
+      overflow-y: auto;
+      max-height: 400px;
+      margin-bottom: 1.5rem;
+    }
+    #expense-list ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      color: #2d3748;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    #expense-list li {
+      margin-bottom: 0.8rem;
+    }
+    #total {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #319795;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" aria-label="Back to Dashboard" id="back-btn">&larr; Dashboard</button>
+  <main role="main" aria-label="Budget Tracker Page">
+    <header>
+      <h1>Budget Tracker</h1>
+    </header>
+    <form id="expense-form" novalidate>
+      <label for="expense-title">Expense Title</label>
+      <input id="expense-title" type="text" placeholder="e.g., Lunch" required />
+      <label for="expense-amount">Amount (₹)</label>
+      <input id="expense-amount" type="number" min="0" step="0.01" placeholder="e.g., 100" required />
+      <button type="submit">Add Expense</button>
+    </form>
+    <div id="total">Total Today: ₹0.00</div>
+    <section id="expense-list" tabindex="0" aria-live="polite" aria-relevant="additions" aria-label="List of expenses">
+      <ul id="expenses-ul">
+        <!-- Expense list items appended here -->
+      </ul>
+    </section>
+    <button type="button" class="clear-btn" id="clear-expenses">Clear Expenses</button>
+  </main>
+
+  <script>
+    function getUserType() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('user') || 'hosteler';
+    }
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+      const userType = getUserType();
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+
+    const today = new Date();
+    function yyyyMmDd(date) {
+      return date.toISOString().split('T')[0];
+    }
+    function storageKey() {
+      return 'mealMinder_budget_' + getUserType() + '_' + yyyyMmDd(today);
+    }
+    function loadExpenses() {
+      try {
+        const data = localStorage.getItem(storageKey());
+        if (!data) return [];
+        return JSON.parse(data);
+      } catch {
+        return [];
+      }
+    }
+    function saveExpenses(expenses) {
+      localStorage.setItem(storageKey(), JSON.stringify(expenses));
+    }
+    function renderExpenses() {
+      const container = document.getElementById('expenses-ul');
+      const totalEl = document.getElementById('total');
+      const expenses = loadExpenses();
+      if (expenses.length === 0) {
+        container.innerHTML = '<li class="text-gray-500 italic">No expenses recorded today.</li>';
+        totalEl.textContent = 'Total Today: ₹0.00';
+        return;
+      }
+      container.innerHTML = '';
+      let total = 0;
+      expenses.forEach(exp => {
+        const li = document.createElement('li');
+        li.textContent = `${exp.title}: ₹${parseFloat(exp.amount).toFixed(2)}`;
+        container.appendChild(li);
+        total += parseFloat(exp.amount);
+      });
+      totalEl.textContent = `Total Today: ₹${total.toFixed(2)}`;
+    }
+
+    document.getElementById('expense-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const titleInput = document.getElementById('expense-title');
+      const amountInput = document.getElementById('expense-amount');
+      const title = titleInput.value.trim();
+      const amount = parseFloat(amountInput.value);
+      if (!title || isNaN(amount) || amount <= 0) {
+        alert('Please enter valid title and amount');
+        return;
+      }
+      let expenses = loadExpenses();
+      expenses.push({ title, amount });
+      saveExpenses(expenses);
+      renderExpenses();
+      titleInput.value = '';
+      amountInput.value = '';
+      alert('Expense added');
+    });
+
+    document.getElementById('clear-expenses').addEventListener('click', () => {
+      if (confirm("Are you sure you want to clear all today's expenses?")) {
+        saveExpenses([]);
+        renderExpenses();
+        alert("All expenses cleared.");
+      }
+    });
+
+    renderExpenses();
+  </script>
+</body>
+</html>

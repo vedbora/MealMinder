@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>MealMinder - Grocery List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.pexels.com/photos/952390/pexels-photo-952390.jpeg?auto=compress&cs=tinysrgb&h=900&w=1600') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      overflow-x: hidden;
+      color: #2d3748;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top:0;left:0;right:0;bottom:0;
+      background-color: rgba(255,255,255,0.85);
+      z-index: 0;
+    }
+
+    #back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 2;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 30px;
+      padding: 0.4rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    #back-btn:hover {
+      background-color: black;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    main {
+      max-width: 500px;
+      margin: 100px auto 60px auto;
+      padding: 2rem 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-weight: 900;
+      font-size: 3.5rem;
+      color: #319795;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    label {
+      font-weight: 600;
+      color: #334155;
+      font-size: 1.1rem;
+    }
+
+    input[type=text] {
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      padding: 12px 15px;
+      font-size: 1.1rem;
+      box-sizing: border-box;
+      width: 100%;
+      transition: all 0.25s ease;
+    }
+
+    input[type=text]:focus {
+      outline: none;
+      border-color: #319795;
+      box-shadow: 0 0 10px #319795aa;
+    }
+
+    button[type=submit] {
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 30px;
+      padding: 0.4rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button[type=submit]:hover,
+    button[type=submit]:focus {
+      background-color: black;
+      color: white;
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    button#clear-list {
+      background-color: #319795;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 14px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(49,151,149,0.7);
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+
+    button#clear-list:hover,
+    button#clear-list:focus {
+      background-color: #e53e3e; /* red */
+      outline: none;
+    }
+
+    #grocery-list {
+      overflow-y: auto;
+      color: #2d3748;
+    }
+
+    #grocery-list ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    #grocery-list li {
+      margin-bottom: 0.8rem;
+    }
+
+    #grocery-list label {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #grocery-list input[type=checkbox] {
+      width: 18px;
+      height: 18px;
+      accent-color: #319795;
+    }
+
+    @media(max-width: 400px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      #back-btn {
+        top: 10px;
+        left: 10px;
+        font-size: 0.75rem;
+        padding: 0.3rem 1rem;
+      }
+
+      main {
+        margin: 80px 0;
+        padding: 1.5rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" aria-label="Back to Dashboard" id="back-btn">&larr; Dashboard</button>
+
+  <main role="main" aria-label="Grocery List Page">
+    <h1>Grocery List</h1>
+
+    <form id="grocery-form" novalidate>
+      <label for="grocery-item">Add Item</label>
+      <input id="grocery-item" type="text" placeholder="e.g., Milk, Bread, Eggs" />
+      <button type="submit" aria-label="Add Item">Add to List</button>
+    </form>
+
+    <section id="grocery-list" tabindex="0" aria-live="polite" aria-relevant="additions removals" aria-label="Your grocery list">
+      <ul id="grocery-ul">
+        <!-- Grocery items appended here -->
+      </ul>
+      <button id="clear-list" style="display:none;" aria-label="Clear Grocery List">Clear List</button>
+    </section>
+  </main>
+
+  <script>
+    function getUserType() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('user') || 'hosteler';
+    }
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+      const userType = getUserType();
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+
+    const storageKey = 'mealMinder_groceryList_' + getUserType();
+
+    function loadGroceryList() {
+      try {
+        const data = localStorage.getItem(storageKey);
+        if (!data) return [];
+        return JSON.parse(data);
+      } catch {
+        return [];
+      }
+    }
+
+    function saveGroceryList(list) {
+      localStorage.setItem(storageKey, JSON.stringify(list));
+    }
+
+    function renderGroceryList() {
+      const listContainer = document.getElementById('grocery-ul');
+      const clearBtn = document.getElementById('clear-list');
+      let list = loadGroceryList();
+      if(list.length === 0) {
+        listContainer.innerHTML = '<li class="text-gray-500 italic">Your grocery list is empty. Add items above.</li>';
+        clearBtn.style.display = 'none';
+        return;
+      }
+      clearBtn.style.display = 'block';
+      listContainer.innerHTML = '';
+      list.forEach((item, idx) => {
+        const li = document.createElement('li');
+        const label = document.createElement('label');
+        label.textContent = item;
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.setAttribute('aria-label', 'Mark '+item+' as purchased');
+        chk.addEventListener('change', () => {
+          if(chk.checked){
+            list.splice(idx, 1);
+            saveGroceryList(list);
+            renderGroceryList();
+          }
+        });
+        label.prepend(chk);
+        li.appendChild(label);
+        listContainer.appendChild(li);
+      });
+    }
+
+    document.getElementById('grocery-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const input = document.getElementById('grocery-item');
+      const val = input.value.trim();
+      if(val === '') {
+        alert('Please enter an item to add');
+        return;
+      }
+      let list = loadGroceryList();
+      list.push(val);
+      saveGroceryList(list);
+      input.value = '';
+      renderGroceryList();
+    });
+
+    document.getElementById('clear-list').addEventListener('click', () => {
+      if(confirm('Clear entire grocery list?')) {
+        localStorage.removeItem(storageKey);
+        renderGroceryList();
+      }
+    });
+
+    renderGroceryList();
+  </script>
+</body>
+</html>

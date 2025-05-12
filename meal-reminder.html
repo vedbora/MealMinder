@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MealMinder - Meal Reminder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    body, html {
+      margin: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.pexels.com/photos/675951/pexels-photo-675951.jpeg?auto=compress&cs=tinysrgb&h=900&w=1600') no-repeat center center fixed;
+      background-size: cover;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background-color: rgba(15, 23, 42, 0.65);
+      z-index: 0;
+    }
+    #container {
+      max-width: 420px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 2rem 2.5rem;
+      border-radius: 16px;
+      min-height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-weight: 800;
+      font-size: 2rem;
+      color: black;
+    }
+    #clock {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: black; /* Clock color changed to black */
+    }
+    button.back-btn {
+      background: transparent;
+      border: 2px solid #319795;
+      color: #319795;
+      border-radius: 30px;
+      padding: 0.3rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+    button.back-btn:hover {
+      background-color: #319795;
+      color: white;
+    }
+    form {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    label {
+      font-weight: 600;
+      color: black;
+      font-size: 1.1rem;
+    }
+    input[type=text] {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 1.1rem;
+      transition: all 0.25s ease;
+    }
+    input[type=text]:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 8px #31979555;
+    }
+    input[type=text]:focus {
+      outline: none;
+      border-color: #319795;
+      box-shadow: 0 0 10px #319795aa;
+    }
+    .time-select {
+      display: flex;
+      gap: 0.5rem;
+    }
+    select {
+      padding: 0.7rem;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: all 0.25s ease;
+      background: #f0fdf4;
+      color: #1e293b;
+    }
+    select:hover {
+      transform: scale(1.03);
+      border-color: #2c7a7b;
+      box-shadow: 0 0 6px #2c7a7b55;
+    }
+    button[type=submit] {
+      background-color: #319795;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: auto;
+    }
+    button[type=submit]:hover {
+      background-color: white;
+      color: #319795;
+      transform: scale(1.05);
+    }
+    #reminder-list {
+      margin-top: 2rem;
+      overflow-y: auto;
+      max-height: 260px;
+    }
+    #reminder-list ul {
+      list-style-type: disc;
+      padding-left: 1.3rem;
+      font-size: 1.1rem;
+      color: #334155;
+    }
+    #reminder-list li {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    h2 {
+      color: black;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+    .clear-btn {
+      background-color: #e53e3e;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .clear-btn:hover {
+      background-color: #b91c1c;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" aria-label="Back to Dashboard" id="back-btn">&larr; Dashboard</button>
+  <div id="container" role="main" aria-label="Meal Reminder Page">
+    <header>
+      <h1>Meal Reminder</h1>
+      <div id="clock" aria-label="Current Time">--:-- --</div>
+    </header>
+    <form id="reminder-form" novalidate>
+      <label for="meal-name">Meal Name</label>
+      <input type="text" id="meal-name" placeholder="e.g., Lunch" required />
+      <label for="meal-time">Reminder Time</label>
+      <div class="time-select">
+        <select id="hour"></select>
+        <select id="minute"></select>
+        <select id="ampm">
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      </div>
+      <button type="submit" aria-label="Set Reminder">Set Reminder</button>
+    </form>
+    <section id="reminder-list" aria-label="Your Reminders">
+      <h2>Your Reminders</h2>
+      <ul id="reminders-ul" aria-live="polite" aria-relevant="additions removals"></ul>
+      <button class="clear-btn" id="clear-btn" aria-label="Clear All Reminders">Clear All Reminders</button>
+    </section>
+  </div>
+
+  <script>
+    // Clock logic
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const minutesStr = minutes < 10 ? '0' + minutes : minutes;
+      document.getElementById('clock').textContent = `${hours}:${minutesStr} ${ampm}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Time dropdown setup
+    function populateTimeSelectors() {
+      const hourSelect = document.getElementById('hour');
+      const minuteSelect = document.getElementById('minute');
+      for (let i = 1; i <= 12; i++) {
+        let opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = i;
+        hourSelect.appendChild(opt);
+      }
+      for (let i = 0; i < 60; i++) {
+        let opt = document.createElement('option');
+        opt.value = i < 10 ? '0' + i : i;
+        opt.textContent = i < 10 ? '0' + i : i;
+        minuteSelect.appendChild(opt);
+      }
+    }
+    populateTimeSelectors();
+
+    function getUserType() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('user') || 'hosteler';
+    }
+
+    function buildRemindersKey() {
+      return 'mealMinder_reminders_' + getUserType();
+    }
+
+    function loadReminders() {
+      let r = localStorage.getItem(buildRemindersKey());
+      return r ? JSON.parse(r) : [];
+    }
+
+    function saveReminders(reminders) {
+      localStorage.setItem(buildRemindersKey(), JSON.stringify(reminders));
+    }
+
+    function renderReminders() {
+      const reminders = loadReminders();
+      const listEl = document.getElementById('reminders-ul');
+      if (reminders.length === 0) {
+        listEl.innerHTML = '<li class="text-muted">No reminders set yet.</li>';
+        return;
+      }
+      listEl.innerHTML = reminders.map(r => `<li>${r.name} at ${r.time}</li>`).join('');
+    }
+
+    document.getElementById('reminder-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const name = document.getElementById('meal-name').value.trim();
+      const hour = document.getElementById('hour').value;
+      const minute = document.getElementById('minute').value;
+      const ampm = document.getElementById('ampm').value;
+      if (!name) {
+        alert('Please enter a meal name');
+        return;
+      }
+      const formattedTime = `${hour}:${minute} ${ampm}`;
+      const reminders = loadReminders();
+      reminders.push({ name, time: formattedTime });
+      saveReminders(reminders);
+      renderReminders();
+      document.getElementById('reminder-form').reset();
+      alert('Reminder set!');
+    });
+
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear all reminders?')) {
+        localStorage.removeItem(buildRemindersKey());
+        renderReminders();
+        alert('All reminders cleared.');
+      }
+    });
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+      const userType = getUserType();
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+
+    renderReminders();
+  </script>
+</body>
+</html>

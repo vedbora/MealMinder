@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>MealMinder - Health Tips</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://img.freepik.com/premium-photo/homemade-green-smoothie-glass-jar-wooden-table-vegetarian-food-concept_35674-9937.jpg?w=996') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      color: #2d3748;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5); /* Darker overlay for better text visibility */
+      z-index: 0;
+    }
+    #container {
+      max-width: 420px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      padding: 2rem 2.5rem;
+      min-height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      border-radius: 20px;
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    }
+    header {
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: white; /* Make header text white */
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Added shadow for better contrast */
+      text-align: center;
+    }
+    ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      font-size: 1.2rem;
+      line-height: 1.7rem;
+      color: white; /* Make the list text white */
+    }
+    ul li {
+      margin-bottom: 0.7rem;
+    }
+    button.back-btn {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      background: transparent;
+      border: 2px solid #319795;
+      color: #319795;
+      border-radius: 30px;
+      padding: 0.3rem 1.2rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 2;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6); /* Added shadow for button text */
+    }
+    button.back-btn:hover {
+      background-color: #319795;
+      color: white;
+    }
+    @media (max-width: 400px) {
+      #container {
+        max-width: 100vw;
+        border-radius: 0;
+        padding: 1.5rem 1rem;
+        min-height: 100vh;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" aria-label="Back to Dashboard" id="back-btn">&larr; Dashboard</button>
+  <div id="container" role="main" aria-label="Health Tips Page">
+    <header>
+      <h1>Daily Wellness & Food Advice</h1>
+    </header>
+    <ul>
+      <li>1. Drink at least 8 cups of water daily.</li>
+      <li>2. Include a portion of vegetables in every meal.</li>
+      <li>3. Avoid processed foods as much as possible.</li>
+      <li>4. Take short walks during breaks.</li>
+      <li>5. Limit caffeine intake after noon to avoid sleep issues.</li>
+    </ul>
+  </div>
+
+  <script>
+    document.getElementById('back-btn').addEventListener('click', () => {
+      const params = new URLSearchParams(window.location.search);
+      const userType = params.get('user') || 'hosteler';
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+  </script>
+</body>
+</html>

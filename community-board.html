@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no"/>
+  <title>MealMinder - Hostel Community Board</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://images.pexels.com/photos/3186654/pexels-photo-3186654.jpeg?auto=compress&cs=tinysrgb&h=900&w=1600') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      overflow: hidden;
+      color: #2d3748;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top:0;left:0;right:0;bottom:0;
+      background-color: rgba(255, 255, 255, 0.85);
+      z-index: 0;
+    }
+    #container {
+      max-width: 420px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      padding: 2rem 2.5rem;
+      min-height: 100vh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    header h1 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: black;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    /* Common style for both buttons */
+    .styled-btn {
+      background-color: white;
+      color: black;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 12px 24px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      border: none;
+    }
+
+    .styled-btn:hover, .styled-btn:focus {
+      background-color: black;
+      color: white;
+      outline: none;
+    }
+
+    #back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    form {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    textarea {
+      width: 100%;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px 15px;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 80px;
+      box-sizing: border-box;
+      transition: all 0.25s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #3182ce;
+      box-shadow: 0 0 10px #3182ceaa;
+    }
+
+    #messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      max-height: 360px;
+      border-top: 1px solid #cbd5e1;
+      padding-top: 12px;
+    }
+
+    .message {
+      background-color: #ebf8ff;
+      border: 1px solid #bee3f8;
+      border-radius: 12px;
+      padding: 12px 15px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: #2c5282;
+      word-wrap: break-word;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .author {
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+      color: #2a4365;
+    }
+
+    @media (max-width: 400px) {
+      #container {
+        max-width: 100vw;
+        border-radius: 0;
+        padding: 1.5rem 1rem;
+        min-height: 100vh;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="styled-btn" id="back-btn" aria-label="Back to Dashboard">&larr; Dashboard</button>
+
+  <div id="container" role="main" aria-label="Hostel Community Board Page">
+    <header>
+      <h1>Hostel Community Board</h1>
+    </header>
+    <form id="message-form" aria-describedby="form-desc" novalidate>
+      <p id="form-desc" class="visually-hidden">Post a new message or food deal</p>
+      <label for="message-text">Write a message or food deal</label>
+      <textarea id="message-text" required placeholder="Share your message or food deal here..."></textarea>
+      <button type="submit" class="styled-btn" aria-label="Post Message">Post Message</button>
+    </form>
+    <section id="messages" aria-live="polite" aria-relevant="additions" tabindex="0" aria-label="Messages posted">
+      <!-- Messages appended here -->
+    </section>
+  </div>
+
+  <script>
+    function getUserType() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('user') || 'hosteler';
+    }
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+      const userType = getUserType();
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+
+    const storageKey = 'mealMinder_communityMessages_hosteler';
+
+    function loadMessages() {
+      try {
+        const data = localStorage.getItem(storageKey);
+        if (!data) return [];
+        return JSON.parse(data);
+      } catch {
+        return [];
+      }
+    }
+
+    function saveMessages(messages) {
+      localStorage.setItem(storageKey, JSON.stringify(messages));
+    }
+
+    function renderMessages() {
+      const container = document.getElementById('messages');
+      const messages = loadMessages();
+      if (messages.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center italic">No messages posted yet.</p>';
+        return;
+      }
+      container.innerHTML = '';
+      messages.forEach(msg => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message';
+        const authorDiv = document.createElement('div');
+        authorDiv.className = 'author';
+        authorDiv.textContent = msg.author;
+        const textDiv = document.createElement('div');
+        textDiv.textContent = msg.message;
+        msgDiv.appendChild(authorDiv);
+        msgDiv.appendChild(textDiv);
+        container.appendChild(msgDiv);
+      });
+    }
+
+    document.getElementById('message-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const textInput = document.getElementById('message-text');
+      const message = textInput.value.trim();
+      if (!message) {
+        alert('Message cannot be empty.');
+        return;
+      }
+      const author = 'Hosteler User';
+      const messages = loadMessages();
+      messages.unshift({author, message});
+      saveMessages(messages);
+      textInput.value = '';
+      renderMessages();
+      alert('Message posted!');
+    });
+
+    renderMessages();
+  </script>
+</body>
+</html>

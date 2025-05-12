@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>MealMinder - Register</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome (Eye icon) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-uWgWyTRUjEQ4J/1eW+n5Ap2k0Q5fChVD8Qml0gPI3KMHLXv+PLKqLGQUFh6xgEAAKMi5HRI+hwBby7hAzS+h0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: url('https://img.freepik.com/free-photo/top-view-circular-frame-with-fruits-vegetables_23-2149235829.jpg?t=st=1746273022~exp=1746276622~hmac=10f4621d0a96def4a3fdda9915586dee726317526b858e862a62d09c1439999f&w=996') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(10, 20, 30, 0.7);
+      z-index: 0;
+    }
+    #register-container {
+      max-width: 400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      padding: 30px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      margin-top: 10vh;
+      background: none;
+    }
+    h2 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: white;
+    }
+    input[type=text],
+    input[type=email],
+    input[type=password],
+    select {
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      padding: 12px 15px;
+      font-size: 1rem;
+      width: 100%;
+      margin-bottom: 20px;
+      transition: all 0.25s ease;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      font-weight: bold;
+    }
+    select {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      color: white !important;
+      border-color: #cbd5e1 !important;
+    }
+    select option {
+      color: black; /* Ensure options are visible */
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #319795;
+      box-shadow: 0 0 10px #319795aa;
+    }
+    input:hover, select:hover {
+      border-color: #2c7a7b;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: white;
+    }
+    button[type=submit] {
+      background-color: #319795;
+      border: none;
+      color: white;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 14px;
+      border-radius: 30px;
+      width: 100%;
+      box-shadow: 0 5px 15px rgba(49,151,149,0.6);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    button[type=submit]:hover {
+      background-color: #2c7a7b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(44,122,123,0.8);
+    }
+    .link-to-login {
+      margin-top: 25px;
+      text-align: center;
+      font-size: 1rem;
+      color: white;
+    }
+    .link-to-login a {
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: underline;
+      transition: all 0.3s ease;
+    }
+    .link-to-login a:hover {
+      color: #63b3ed;
+      text-decoration: none;
+    }
+    @media (max-width: 400px) {
+      #register-container {
+        margin-top: 5vh;
+        padding: 25px;
+      }
+      h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main id="register-container" role="main" aria-label="Register Page">
+    <h2>Register</h2>
+    <form id="register-form" novalidate aria-describedby="register-instruction">
+      <p id="register-instruction" class="visually-hidden">Fill in the form with your details and select user type to register</p>
+      <label for="name">Name</label>
+      <input id="name" type="text" placeholder="Full name" required autocomplete="name" />
+
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@example.com" required autocomplete="email" />
+
+      <label for="password">Password</label>
+      <div class="password-wrapper">
+        <input id="password" type="password" placeholder="Choose a password" required autocomplete="new-password" />
+        <span id="togglePassword" class="fa-solid fa-eye toggle-password"></span>
+      </div>
+
+      <label for="usertype">Select User Type</label>
+      <select id="usertype" required>
+        <option value="" disabled selected>Choose one</option>
+        <option value="student">Student</option>
+        <option value="it">IT Professional</option>
+      </select>
+
+      <div style="margin-bottom: 20px;"></div>
+      <button type="submit" aria-label="Submit registration form">Register</button>
+    </form>
+    <p class="link-to-login">Already have an account? <a href="login.html">Login here</a></p>
+  </main>
+
+  <script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+      const passwordInput = document.getElementById('password');
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.classList.toggle('fa-eye-slash');
+    });
+
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const userType = document.getElementById('usertype').value;
+      if (!name || !email || !password || !userType) {
+        alert('Please fill in all fields');
+        return;
+      }
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/i;
+      if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address');
+        return;
+      }
+      alert(`Registration successful! Welcome ${name} (${userType === 'student' ? 'Student' : 'IT Professional'}).`);
+      window.location.href = `dashboard.html?user=${userType}`;
+    });
+  </script>
+</body>
+</html>
